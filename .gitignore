@@ -1,0 +1,18 @@
+# 构建产物
+*/build/
+*/logs/
+
+# 操作系统垃圾文件
+.DS_Store
+Thumbs.db
+
+# vscode配置
+.vscode/
+*.swp
+*.swo
+
+# 日志、临时文件
+*.log
+.hugo_build*.lock
+Note.md
+temp.txt
