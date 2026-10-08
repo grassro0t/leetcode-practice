@@ -108,16 +108,16 @@ public:
   }
   // 300｜最长递增子序列｜中等
   int lengthOfLIS(vector<int> &nums) {
-    vector<int> g;
-    for (auto &&num : nums) {
-      auto it = ranges::lower_bound(g, num);
-      if (it == g.end()) {
-        g.emplace_back(num);
-      } else {
-        *it = num;
+    vector<int> dp(nums.size(), 1);
+    int res = INT_MIN;
+    for (int i = 1; i < nums.size(); i++) {
+      for (int j = 0; j < i; j++) {
+        if (nums[i] > nums[j])
+          dp[i] = max(dp[i], dp[j] + 1);
       }
+      res = max(res, dp[i]);
     }
-    return g.size();
+    return res == INT_MIN ? 1 : res;
   }
   // 62｜不同路径｜中等
   int uniquePaths(int m, int n) {
@@ -169,6 +169,21 @@ public:
       }
     }
     return max_val * max_val;
+  }
+  // 152｜乘积最大子数组｜中等
+  int maxProduct(vector<int> &nums) {
+    int n = nums.size();
+    vector<int> max_dp(n + 1, 1);
+    vector<int> min_dp(n + 1, 1);
+    int res = INT_MIN;
+    for (int i = 1; i <= n; i++) {
+      max_dp[i] = max({max_dp[i - 1] * nums[i - 1], nums[i - 1],
+                       min_dp[i - 1] * nums[i - 1]});
+      min_dp[i] = min({max_dp[i - 1] * nums[i - 1], nums[i - 1],
+                       min_dp[i - 1] * nums[i - 1]});
+      res = max(res, max_dp[i]);
+    }
+    return res;
   }
 };
 } // namespace lesson9

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace lesson1 {
@@ -197,6 +199,89 @@ public:
         return i + 1;
     }
     return n + 1;
+  }
+  // 73｜矩阵置零｜中等
+  void setZeroes(vector<vector<int>> &matrix) {
+    unordered_set<int> us_x;
+    unordered_set<int> us_y;
+    int m = matrix.size();
+    int n = matrix[0].size();
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        if (matrix[i][j] == 0) {
+          us_x.emplace(i);
+          us_y.emplace(j);
+        }
+      }
+    }
+    for (auto &&e : us_x) {
+      for (int i = 0; i < n; i++) {
+        matrix[e][i] = 0;
+      }
+    }
+    for (auto &&e : us_y) {
+      for (int i = 0; i < m; i++) {
+        matrix[i][e] = 0;
+      }
+    }
+  }
+  // 54｜螺旋矩阵｜中等
+  vector<int> spiralOrder(vector<vector<int>> &matrix) {
+    vector<int> res;
+    if (matrix.size() == 0)
+      return res;
+    int l = 0;
+    int r = matrix[0].size() - 1;
+    int t = 0;
+    int b = matrix.size() - 1;
+    while (true) {
+      for (int i = l; i <= r; i++)
+        res.emplace_back(matrix[t][i]);
+      if (++t > b)
+        break;
+      for (int i = t; i <= b; i++)
+        res.emplace_back(matrix[i][r]);
+      if (l > --r)
+        break;
+      for (int i = r; i >= l; i--)
+        res.emplace_back(matrix[b][i]);
+      if (t > --b)
+        break;
+      for (int i = b; i >= t; i--)
+        res.emplace_back(matrix[i][l]);
+      if (++l > r)
+        break;
+    }
+    return res;
+  }
+  // 48｜旋转图像｜中等
+  void rotate(vector<vector<int>> &matrix) {
+    int n = matrix.size();
+    for (int i = 0; i < n / 2; i++) {
+      for (int j = 0; j < (n + 1) / 2; j++) {
+        int temp = matrix[i][j];
+        matrix[i][j] = matrix[n - 1 - j][i];
+        matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 - j];
+        matrix[n - 1 - i][n - 1 - j] = matrix[j][n - 1 - i];
+        matrix[j][n - 1 - i] = temp;
+      }
+    }
+  }
+  // 74｜搜索二维矩阵｜中等
+  bool searchMatrix(vector<vector<int>> &matrix, int target) {
+    int m = matrix.size();
+    int n = matrix[0].size();
+    int i = 0;
+    int j = n - 1;
+    while (i < m && j >= 0) {
+      if (matrix[i][j] == target)
+        return true;
+      else if (matrix[i][j] > target)
+        j--;
+      else
+        i++;
+    }
+    return false;
   }
 };
 } // namespace lesson1

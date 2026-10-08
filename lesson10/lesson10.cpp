@@ -18,23 +18,23 @@ public:
   }
   // 55｜跳跃游戏｜中等
   bool canJump(vector<int> &nums) {
-    int mx = 0;
+    int r = 0;
     for (int i = 0; i < nums.size(); i++) {
-      if (i > mx)
+      if (i > r)
         return false;
-      mx = max(mx, i + nums[i]);
+      r = max(r, i + nums[i]);
     }
     return true;
   }
   // 45｜跳跃游戏 II｜中等
   int jump(vector<int> &nums) {
-    int mx = 0;
+    int r = 0;
     int end = 0;
     int res = 0;
     for (int i = 0; i < nums.size() - 1; i++) {
-      mx = max(mx, nums[i] + i);
+      r = max(r, nums[i] + i);
       if (i == end) {
-        end = mx;
+        end = r;
         res++;
       }
     }
@@ -59,36 +59,6 @@ public:
     }
     return res;
   }
-  // 215｜数组中的第 K 个最大元素｜中等
-  int findKthLargest(vector<int> &nums, int k) {
-    priority_queue<int> q(nums.begin(), nums.end());
-    int res = 0;
-    while (k) {
-      res = q.top();
-      q.pop();
-      k--;
-    }
-    return res;
-  }
-  // 347｜前 K 个高频元素｜中等
-    vector<int> topKFrequent(vector<int>& nums, int k) {
-        unordered_map<int,int> um;
-        auto cmp = [](pair<int,int> a,pair<int,int> b)->bool{
-            return a.second<b.second;
-        };
-        for(int i=0;i<nums.size();i++){
-            if(um.contains(nums[i])) um[nums[i]]++;
-            else um.emplace(nums[i],1);
-        }
-        priority_queue<pair<int,int>,vector<pair<int,int>>,decltype(cmp)> q(um.begin(),um.end());
-        vector<int> res;
-        while(k){
-            res.emplace_back(q.top().first);
-            q.pop();
-            k--;
-        }
-        return res;
-    }
 };
 } // namespace lesson10
 

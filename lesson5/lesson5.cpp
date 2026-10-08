@@ -154,6 +154,23 @@ public:
     }
     return res;
   }
+  // 239｜滑动窗口最大值｜困难
+  vector<int> maxSlidingWindow(vector<int> &nums, int k) {
+    deque<int> dq;
+    vector<int> res;
+    for (int r = 0; r < nums.size(); r++) {
+      while (!dq.empty() && nums[dq.back()] <= nums[r]) {
+        dq.pop_back();
+      }
+      dq.push_back(r);
+      while (!dq.empty() && dq.front() <= r - k) {
+        dq.pop_front();
+      }
+      if (r >= k - 1)
+        res.emplace_back(nums[dq.front()]);
+    }
+    return res;
+  }
   // 76｜最小窗口子串｜困难
   string minWindow(string s, string t) {
     array<int, 52> arr, arr_t;

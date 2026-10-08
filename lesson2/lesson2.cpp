@@ -15,18 +15,14 @@ class Solution {
 
   // 1｜两数之和｜简单
   vector<int> twoSum(vector<int> &nums, int target) {
-    unordered_map<int, int> nums_map;
-    for (int i = 0; i < nums.size(); i++) {
-      nums_map.emplace(nums[i], i);
-    }
+    unordered_map<int, int> um;
     vector<int> res;
-    for (int i = 0; i < nums.size(); i++) {
-      int temp = target - nums[i];
-      if (nums_map.count(temp) != 0 && nums_map[temp] != i) {
-        res.emplace_back(i);
-        res.emplace_back(nums_map[temp]);
-        break;
+    for (int j = 0; j < nums.size(); j++) {
+      if (um.contains(target - nums[j])) {
+        res.emplace_back(um[target - nums[j]]);
+        res.emplace_back(j);
       }
+      um[nums[j]] = j;
     }
     return res;
   }

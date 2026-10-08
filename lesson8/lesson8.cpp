@@ -87,43 +87,15 @@ public:
     return deep;
   }
   // 101｜对称二叉树｜简单
-  bool isSymmetric(TreeNode *root) {
-    vector<TreeNode *> vec;
-    vec.emplace_back(root);
-    while (!vec.empty()) {
-      vector<TreeNode *> temp;
-      for (auto &&node : vec) {
-        if (!node)
-          continue;
-        temp.emplace_back(node->left);
-        temp.emplace_back(node->right);
-      }
-      int mid = temp.size() / 2;
-      int n = temp.size();
-      for (int i = 0; i < mid; i++) {
-        if (temp[i] && temp[n - 1 - i]) {
-          if (temp[i]->val == temp[n - 1 - i]->val)
-            continue;
-          return false;
-        } else {
-          if (!temp[i] && !temp[n - 1 - i])
-            continue;
-          return false;
-        }
-      }
-      vec = temp;
-    }
-    return true;
-  }
-  bool recur(TreeNode *L, TreeNode *R) {
-    if (L == nullptr && R == nullptr)
+  bool isSymmetric(TreeNode *root) { return check(root->left, root->right); }
+
+  bool check(TreeNode *l, TreeNode *r) {
+    if (!l && !r)
       return true;
-    if (L == nullptr || R == nullptr || L->val != R->val)
+    if (!l || !r)
       return false;
-    return recur(L->left, R->right) && recur(L->right, R->left);
-  }
-  bool isSymmetric(TreeNode *root) {
-    return root == nullptr || recur(root->left, root->right);
+    return l->val == r->val && check(l->left, r->right) &&
+           check(l->right, r->left);
   }
   // 543｜二叉树的直径｜简单
   int max_val = 0;
@@ -176,31 +148,39 @@ public:
   }
   // 98｜验证二叉搜索树｜中等
   long long pre = LONG_MIN;
+  bool res = true;
   bool isValidBST(TreeNode *root) {
-    if (!root)
-      return true;
-    if (!isValidBST(root->left))
-      return false;
-    if (root->val <= pre)
-      return false;
-    pre = root->val;
-    return isValidBST(root->right);
+    inorder(root);
+    return res;
   }
-  // 230｜二叉搜索树中第 K 小的元素｜中等
-  int k, res;
-  void my_dfs(TreeNode *root) {
+  void inorder(TreeNode *root) {
     if (!root)
       return;
-    dfs(root->left);
-    k--;
-    if (k == 0)
-      res = root->val;
-    dfs(root->right);
+    inorder(root->left);
+    if (pre >= root->val)
+      res = false;
+    pre = root->val;
+    inorder(root->right);
   }
+  // 230｜二叉搜索树中第 K 小的元素｜中等
+  int k;
+  int res = -1;
   int kthSmallest(TreeNode *root, int k) {
     this->k = k;
-    my_dfs(root);
+    inorder(root);
     return res;
+  }
+
+  void inorder(TreeNode *root) {
+    if (!root || res != -1)
+      return;
+    inorder(root->left);
+    k--;
+    if (k == 0) {
+      res = root->val;
+      return;
+    }
+    inorder(root->right);
   }
   // 199｜二叉树的右视图｜中等
   vector<int> rightSideView(TreeNode *root) {
@@ -393,6 +373,41 @@ public:
     int r = dfs(root->right);
     max_len = max(max_len, l + r + root->val);
     return max(max(l, r) + root->val, 0);
+  }
+  // 51｜N 皇后｜困难
+  vector<vector<string>> res;
+  int n;
+  vector<vector<string>> solveNQueens(int n) {
+    this->n = n;
+    vector<string> board(n, string(n, '.'));
+    bt(board, 0);
+    return res;
+  }
+
+  void bt(vector<string> &board, int x) {
+    if (x == n) {
+      res.emplace_back(board);
+      return;
+    }
+    for (int y = 0; y < n; y++) {
+      if (isvalid(board, x, y)) {
+        board[x][y] = 'Q';
+        bt(board, x + 1);
+        board[x][y] = '.';
+      }
+    }
+  }
+
+  bool isvalid(vector<string> &board, int x, int y) {
+    for (int i = 0; i < x; i++) {
+      if (board[i][y] == 'Q')
+        return false;
+      for (int j = 0; j < n; j++) {
+        if (board[i][j] == 'Q' && abs(i - x) == abs(j - y))
+          return false;
+      }
+    }
+    return true;
   }
 };
 } // namespace lesson8
