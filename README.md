@@ -1,2 +1,22 @@
 # leetcode代码仓库
 >将根据不同类型将常见题目分类，持续更新中...
+- data-structure 常见数据结构
+  - BloomFilter 布隆过滤器
+  - DoubleLinkedList 双向链表
+  - HashTable 哈希表
+  - RBTree 红黑树
+  - BPlusTree B+树
+  - SkipList 跳表
+- binarytree：二叉树前序中序后序遍历（迭代实现）和层序遍历
+- sort：10种排序中重要的方法
+- design-patterns 常见设计模式
+  - Singleton 单例
+  - Factory 工厂
+  - AbstractFactory 抽象工厂
+  - Facade 门面
+  - TemplateMethod 模板方法
+  - Strategy 策略
+  - Decorator 装饰器
+  - Proxy 代理
+  - Observer 观察者
+  - Adapter 适配器

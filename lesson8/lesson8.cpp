@@ -359,6 +359,99 @@ public:
       sum.pop_back();
     }
   }
+  // 22｜括号生成｜中等
+  int n;
+  vector<string> res;
+  vector<string> generateParenthesis(int n) {
+    this->n = n;
+    stack<char> st;
+    string temp;
+    bt(st, 0, temp);
+    return res;
+  }
+
+  void bt(stack<char> &st, int x, string &str) {
+    if (x == 2 * n) {
+      if (st.empty()) {
+        res.emplace_back(str);
+      }
+      return;
+    }
+    st.push('(');
+    str += '(';
+    bt(st, x + 1, str);
+    str.pop_back();
+    st.pop();
+    if (!st.empty() && st.top() == '(') {
+      st.pop();
+      str += ')';
+      bt(st, x + 1, str);
+      str.pop_back();
+      st.push('(');
+    }
+  }
+  // 79｜单词搜索｜中等
+  bool exist(vector<vector<char>> &board, string word) {
+    bool res = false;
+    for (int i = 0; i < board.size(); i++) {
+      for (int j = 0; j < board[0].size(); j++) {
+        if (board[i][j] == word[0]) {
+          if (dfs(board, i, j, word, 0))
+            return true;
+        }
+      }
+    }
+    return res;
+  }
+
+  bool dfs(vector<vector<char>> &board, int x, int y, string &word, int i) {
+    if (x < 0 || y < 0 || x >= board.size() || y >= board[0].size() ||
+        board[x][y] != word[i])
+      return false;
+    if (i == word.size() - 1)
+      return true;
+    board[x][y] = '\0';
+    bool res = dfs(board, x + 1, y, word, i + 1) ||
+               dfs(board, x - 1, y, word, i + 1) ||
+               dfs(board, x, y + 1, word, i + 1) ||
+               dfs(board, x, y - 1, word, i + 1);
+    board[x][y] = word[i];
+    return res;
+  }
+  // 131｜分割回文串｜中等
+  vector<vector<string>> res;
+  vector<vector<string>> partition(string s) {
+    vector<string> vec;
+    bt(s, 0, 0, vec);
+    return res;
+  }
+
+  bool isRecycle(string s) {
+    int l = 0;
+    int r = s.size() - 1;
+    while (l < r) {
+      if (s[l] != s[r])
+        return false;
+      l++;
+      r--;
+    }
+    return true;
+  }
+
+  void bt(string &s, int x, int pre, vector<string> vec) {
+    if (x >= s.size()) {
+      if (pre == x)
+        res.emplace_back(vec);
+      return;
+    }
+    string temp = s.substr(pre, x - pre + 1);
+    if (isRecycle(temp)) {
+      vec.emplace_back(temp);
+      bt(s, x + 1, x + 1, vec);
+      vec.pop_back();
+    }
+    bt(s, x + 1, pre, vec);
+  }
   // 124｜二叉树中的最大路径和｜困难
   int max_len = INT_MIN;
   int maxPathSum(TreeNode *root) {

@@ -185,6 +185,88 @@ public:
     }
     return res;
   }
+  // 416｜分割等和子集｜中等
+  bool canPartition(vector<int> &nums) {
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    if (sum % 2 != 0)
+      return false;
+    int target = sum / 2;
+    int n = nums.size();
+    vector<vector<bool>> dp(n + 1, vector<bool>(target + 1, false));
+    dp[0][0] = true;
+    for (int i = 1; i <= n; i++) {
+      int val = nums[i - 1];
+      for (int j = 0; j <= target; j++) {
+        if (j < val) {
+          dp[i][j] = dp[i - 1][j];
+        } else {
+          dp[i][j] = dp[i - 1][j] || dp[i - 1][j - val];
+        }
+      }
+    }
+    return dp[n][target];
+  }
+  // 1143｜最长公共子序列｜中等
+  int longestCommonSubsequence(string text1, string text2) {
+    int n = text1.size();
+    int m = text2.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+    for (int i = 1; i <= n; i++) {
+      for (int j = 1; j <= m; j++) {
+        if (text1[i - 1] == text2[j - 1]) {
+          dp[i][j] = max({dp[i - 1][j - 1] + 1, dp[i - 1][j], dp[i][j - 1]});
+        } else {
+          dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+        }
+      }
+    }
+    return dp[n][m];
+  }
+  // 72｜编辑距离｜困难
+  int minDistance(string word1, string word2) {
+    int n = word1.size();
+    int m = word2.size();
+    vector<vector<int>> dp(n + 1, vector<int>(m + 1, 0));
+    for (int i = 0; i <= n; i++) {
+      for (int j = 0; j <= m; j++) {
+        if (i == 0) {
+          dp[i][j] = j;
+          continue;
+        }
+        if (j == 0) {
+          dp[i][j] = i;
+          continue;
+        }
+        if (word1[i - 1] == word2[j - 1]) {
+          dp[i][j] =
+              min({dp[i - 1][j - 1], dp[i - 1][j] + 1, dp[i][j - 1] + 1});
+        } else {
+          dp[i][j] = min({dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]}) + 1;
+        }
+      }
+    }
+    return dp[n][m];
+  }
+  // 32｜最长有效括号｜困难
+  int longestValidParentheses(string s) {
+    stack<int> st;
+    st.push(-1);
+    int n = s.size();
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+      if (s[i] == '(') {
+        st.push(i);
+      } else {
+        st.pop();
+        if (st.empty()) {
+          st.push(i);
+        } else {
+          res = max(res, i - st.top());
+        }
+      }
+    }
+    return res;
+  }
 };
 } // namespace lesson9
 

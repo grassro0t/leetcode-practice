@@ -14,84 +14,74 @@ public:
   void QuickSort(vector<int> &arr, int l, int r) {
     if (l >= r)
       return;
-    int rand_id = l + rand() % (r - l + 1);
-    swap(arr[rand_id], arr[r]);
-    int middle = Partition(arr, l, r);
-    QuickSort(arr, l, middle - 1);
-    QuickSort(arr, middle + 1, r);
+    int mid = Partition(arr, l, r);
+    QuickSort(arr, l, mid - 1);
+    QuickSort(arr, mid + 1, r);
   }
+
   int Partition(vector<int> &arr, int l, int r) {
-    int val = arr[r];
+    swap(arr[l + rand() % (r - l + 1)], arr[r]);
+    int p = arr[r];
     int i = l;
     int j = r - 1;
     while (i <= j) {
-      while (i <= j && arr[i] < val)
+      while (i <= j && arr[i] <= p)
         i++;
-      while (i <= j && arr[j] > val)
+      while (i <= j && arr[j] >= p)
         j--;
-      if (i <= j) {
+      if (i <= j)
         swap(arr[i], arr[j]);
-        i++;
-        j--;
-      }
     }
     swap(arr[i], arr[r]);
     return i;
   }
   // 归并排序
-  void MergeSort(vector<int> &arr, int l, int r) {
+  void MergeSort(vector<int> &arr, vector<int> &temp, int l, int r) {
     if (l >= r)
       return;
     int mid = l + (r - l) / 2;
-    MergeSort(arr, l, mid);
-    MergeSort(arr, mid + 1, r);
-    vector<int> temp;
+    MergeSort(arr, temp, l, mid - 1);
+    MergeSort(arr, temp, mid, r);
+    Merge(arr, temp, l, r, mid);
+  }
+
+  void Merge(vector<int> &arr, vector<int> &temp, int l, int r, int mid) {
     int i = l;
-    int j = mid + 1;
-    while (i <= mid && j <= r) {
-      if (arr[i] < arr[j])
-        temp.emplace_back(arr[i++]);
+    int j = mid;
+    int k = l;
+    while (i <= mid - 1 && j <= r) {
+      if (arr[i] <= arr[j])
+        temp[k++] = arr[i++];
       else
-        temp.emplace_back(arr[j++]);
+        temp[k++] = arr[j++];
     }
-    while (i <= mid)
-      temp.emplace_back(arr[i++]);
+    while (i <= mid - 1)
+      temp[k++] = arr[i++];
     while (j <= r)
-      temp.emplace_back(arr[j++]);
-    for (int k = 0; k < temp.size(); k++)
-      arr[l + k] = temp[k];
+      temp[k++] = arr[j++];
+    for (int p = l; p <= r; p++)
+      arr[p] = temp[p];
   }
   // 堆排序
   void HeapSort(vector<int> &arr) {
+    priority_queue<int> pq;
     int n = arr.size();
-    for (int i = n / 2 - 1; i >= 0; i--)
-      Heapify(arr, n, i);
-    for (int i = n - 1; i >= 0; i--) {
-      swap(arr[0], arr[i]);
-      Heapify(arr, i, 0);
+    for (int i = 0; i < n; i++) {
+      pq.push(arr[i]);
     }
-  }
-  void Heapify(vector<int> &arr, int n, int i) {
-    int largest = i;
-    int l = 2 * i + 1;
-    int r = 2 * i + 2;
-    if (l < n && arr[l] > arr[largest])
-      largest = l;
-    if (r < n && arr[r] > arr[largest])
-      largest = r;
-    if (largest != i) {
-      swap(arr[i], arr[largest]);
-      Heapify(arr, n, largest);
+    int idx = n - 1;
+    while (!pq.empty()) {
+      arr[idx--] = pq.top();
+      pq.pop();
     }
   }
   // 冒泡排序
-  void bubbleSort(std::vector<int> &arr) {
+  void BubbleSort(vector<int> &arr) {
     int n = arr.size();
-    for (int i = 0; i < n - 1; ++i) {
-      for (int j = 0; j < n - i - 1; ++j) {
-        if (arr[j] > arr[j + 1]) {
-          std::swap(arr[j], arr[j + 1]);
-        }
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < n - 1 - i; j++) {
+        if (arr[j + 1] < arr[j])
+          swap(arr[j + 1], arr[j]);
       }
     }
   }

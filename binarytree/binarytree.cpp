@@ -91,20 +91,24 @@ public:
     post_res.emplace_back(root->val);
   }
   // 层序遍历
-  vector<int> levelorder(TreeNode *root) {
-    queue<TreeNode *> q;
+  vector<int> LevelOrder(TreeNode *root) {
     vector<int> res;
     if (!root)
       return res;
-    q.push(root);
+    vector<TreeNode *> q;
+    q.emplace_back(root);
     while (!q.empty()) {
-      TreeNode *cur = q.front();
-      q.pop();
-      res.emplace_back(cur->val);
-      if (cur->left)
-        q.push(cur->left);
-      if (cur->right)
-        q.push(cur->right);
+      vector<TreeNode *> vec;
+      while (!q.empty()) {
+        TreeNode *temp = q.front();
+        q.erase(q.begin());
+        res.emplace_back(temp->val);
+        if (temp->left)
+          vec.emplace_back(temp->left);
+        if (temp->right)
+          vec.emplace_back(temp->right);
+      }
+      q = vec;
     }
     return res;
   }

@@ -98,6 +98,35 @@ public:
     }
     return -1;
   }
+  // 4｜寻找两个正序数组的中位数｜困难
+  double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2) {
+    if (nums2.size() < nums1.size())
+      return findMedianSortedArrays(nums2, nums1);
+    int m = nums1.size();
+    int n = nums2.size();
+    int l = 0;
+    int r = m;
+    while (l <= r) {
+      int i = l + (r - l) / 2;
+      int j = (m + n + 1) / 2 - i;
+      int aleft = i == 0 ? INT_MIN : nums1[i - 1];
+      int aright = i == m ? INT_MAX : nums1[i];
+      int bleft = j == 0 ? INT_MIN : nums2[j - 1];
+      int bright = j == n ? INT_MAX : nums2[j];
+      if (aleft <= bright && bleft <= aright) {
+        if ((m + n) % 2 == 0) {
+          return (max(aleft, bleft) + min(aright, bright)) / 2.0;
+        } else {
+          return max(aleft, bleft);
+        }
+      } else if (aleft > bright) {
+        r = i - 1;
+      } else {
+        l = i + 1;
+      }
+    }
+    return 0;
+  }
 };
 } // namespace lesson6
 
